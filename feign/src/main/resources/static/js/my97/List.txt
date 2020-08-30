@@ -1,0 +1,106 @@
+<a onclick="searchBook()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>
+<a onclick="deleteBookMany()" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">批量删除</a>
+<a onclick="openAddBookDialog()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">新增</a>
+<input type="text" class="easyui-textbox" id="searchBookName"/>
+
+
+function searchBook(){//搜索
+$("#bookTable").datagrid('load',{
+			bname:bname,
+			btypeid:btypeid,
+			starttime:starttime,
+			endtime:endtime,
+			bshengid:bshengid,
+			bshiid:bshiid
+		})
+	};
+
+
+function initBookTable(){
+	$("#MyTable").datagrid({
+		url:'<%=request.getContextPath()%>/book/findBookList.do',
+		method:'post',
+		toolbar:'#toolbar2',
+		fit:true,
+		pagination:true,//开启分页工具条
+		pageNumber:1,
+		pageSize:2,
+		pageList:[4,8,10,20,30],
+		columns:[[
+			{field:'bac',checkbox:true},
+			{field:'bid',title:'编号'},
+			{field:'bname',title:'图书名'},
+			{field:'bprice',title:'价格'},
+			{field:'tname',title:'类型'},
+			{field:'bookimg',title:'封面',formatter:function(value,row,index){
+				return '<img width="50px" height="50px" src="'+value+'"/>';
+			}},
+			{field:'bookinfo',title:'描述'},
+			{field:'bdate',title:'出版时间'},
+			{field:'sheng',title:'地区',formatter:function(value,row,index){
+				return value + "-" + row.shi;
+			}},
+			{field:'cz',title:'操作',formatter:function(value,row,index){
+				return '<a href="javascript:deleteBook('+row.bid+');">删除</a>'+
+				' |  <a href="javascript:updateBook('+row.bid+');">修改</a>';
+			}}
+		]]
+	})
+}
+
+
+<div id="bookDialog" class="easyui-dialog" data-options="modal:true,closed:true,buttons:[
+		{
+			text:'保存',
+			iconCls:'icon-save',
+			plain:true,
+			handler:function(){
+				saveOrUpdate();
+			}
+		}
+	]" style="width: 900px;height: 520px"></div>
+function openAddBookDialog(){//弹
+	$("#bookForm").form('clear');//清空表单
+	$("#testimg").attr('src','');//清空图片
+	editor.html('');//清空富文本
+	
+	$("#bookDialog").dialog({
+		title:'新增图书',
+		iconCls:'icon-add',
+		closed:false
+		//关闭弹框
+		("#bookDialog").dialog('close');
+	})	
+}
+
+
+
+
+function deleteBookMany(){//批量删除
+	var books = $("#bookTable").datagrid('getChecked');
+	if(books.length <= 0){
+		$.messager.alert('提示','请选择需要删除的数据','warning');
+	}else{
+		$.messager.confirm('提示','你确定要删除吗？',function(r){
+			if (r) {
+				var ids = '';
+				for (var i = 0; i < books.length; i++) {
+					ids += (ids == '' ? books[i].bid : ','+ books[i].bid);
+				}
+				$.post('<%=request.getContextPath()%>/book/deleteBookMany.do',{ids:ids},function(data){
+					//没有搜索的时候，删除完成后调用reload重新加载列表
+					//$("#bookTable").datagrid('reload');
+					searchBook();
+				})
+			}
+		})
+	}
+}
+
+function initSearchBookType(){//加载类型
+		$("#searchBookType").combobox({
+			url:'<%=request.getContextPath()%>/book/findBookTypeList.do',
+			valueField:'tid',
+			textField:'tname'
+		})
+	}

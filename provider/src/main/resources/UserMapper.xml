@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.mapper.UserMapper">
+    <insert id="saveAll" parameterType="com.jk.entity.ProductBean">
+        insert into t_product  (id,ad_title,image_url,pc_price,color,link_url,sku_cid3) VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+                (#{item.id},#{item.adTitle},#{item.imageUrl},#{item.pcPrice},#{item.color},#{item.linkUrl},#{item.skuCid3})
+        </foreach>
+    </insert>
+
+  <!--  <select id="count" parameterType="int">
+        select count(*) from t_product
+    </select>-->
+
+<!--    <select id="findProductList" parameterType="com.jk.entity.ProductBean">
+        select * from t_product
+    </select>-->
+</mapper>

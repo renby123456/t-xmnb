@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" th:href="@{/js/bootstrap3/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap-table/bootstrap-table.css}">
+    <link rel="stylesheet"  th:href="@{/js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css}">
+
+    <script th:src="@{/js/jquery-1.11.3.min.js}"></script>
+    <script th:src="@{/js/bootstrap3/js/bootstrap.js}"></script>
+    <script th:src="@{/js/bootstrap-table/bootstrap-table.js}"></script>
+    <script th:src="@{/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}"></script>
+    <script th:src="@{/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js}"></script>
+    <script th:src="@{/js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <script th:src="@{/js/bootstrap-bootbox/bootbox.all.min.js}"></script>
+
+    <link rel="shortcut icon" th:href="@{/assets/img/favicon.ico}" type="img/png">
+    <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slick.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap-datepicker.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/default.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+
+<!--    &lt;!&ndash;====== jquery js ======&ndash;&gt;-->
+    <script th:src="@{/assets/js/vendor/modernizr-3.6.0.min.js}"></script>
+    <script th:src="@{/assets/js/popper.min.js}"></script>
+    <script th:src="@{/assets/js/slick.min.js}"></script>
+    <script th:src="@{/assets/js/isotope.pkgd.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.magnific-popup.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.inview.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.countTo.js}"></script>
+    <script th:src="@{/assets/js/jquery.nice-select.min.js}"></script>
+    <script th:src="@{/assets/js/bootstrap-datepicker.js}"></script>
+    <script th:src="@{/assets/js/wow.min.js}"></script>
+    <script src="https://ditu.google.cn/maps/api/js?key=AIzaSyDC3Ip9iVC0nIxC6V14CKLQ1HZNF_65qEQ"></script>
+    <script th:src="@{/assets/js/map.js}"></script>
+
+   <script th:src="@{/js/easyui/jquery.min.js}"></script>
+    <script th:src="@{/js/easyui/jquery.easyui.min.js}"></script>
+    <script th:src="@{/js/easyui/locale/easyui-lang-zh_CN.js}"></script>
+    <script th:src="@{/js/easyui/util-js.js}"></script>
+    <link rel="stylesheet" th:href="@{/js/easyui/themes/icon.css}"/>
+    <link rel="stylesheet" th:href="@{/js/easyui/themes/bootstrap/easyui.css}"/>
+</head>
+<body>
+<table id="productTable"></table>
+<section class="room-section room-grid-style pt-120 pb-120">
+    <div class="container">
+        <div class="row justify-content-center room-gird-loop">
+            <div id="teXiaoTu"></div>
+
+        </div>
+    </div>
+</section>
+</body>
+<script>
+    $(function () {
+        //initproductTable();
+        initTable();
+    })
+    /* 初始化表 */
+    function initTable(){
+        var search1=location.search;   //获取location的search属性，保存在search中
+        search = search1.substr(1);
+        value = decodeURIComponent(search1);//执行解码，因为中文字符串往往在传递时被编码过了
+        var s = value.replace("?adTitle=","");
+        var s1 = s.replace("&skuCid3=",",");
+        var skip = s1.split(",");
+        var adTitle = skip[0];
+        var skuCid3 = skip[1];
+        $.post('../product/findProductByCid?adTitle='+adTitle+'&skuCid3='+skuCid3,{page:1,size:20},function(data){
+            var html='';
+            debugger
+            for (var i = 0; i <data.length ; i++) {
+                var imageUrl=data[i].imageUrl;
+                html +=
+                    '<div class="col-lg-4 col-md-6 col-sm-6" style="height: 550px;width: 600px">' +
+                    '                <div class="room-box mb-30">' +
+                    '                    <div class="room-img-wrap">' +
+                    '                        <div class="room-img"  style="background-image: url('+"http://img14.360buyimg.com/n2/"+imageUrl+');"></div>' +
+                    '                    </div>' +
+                    '                    <div class="room-desc">' +
+                    '                        <ul class="icons">' +
+                    '                            <li><i class="fal fa-bed"></i></li>' +
+                    '                            <li><i class="fal fa-wifi"></i></li>' +
+                    '                            <li><i class="fal fa-car"></i></li>' +
+                    '                            <li><i class="fal fa-coffee"></i></li>' +
+                    '                            <li><i class="fal fa-concierge-bell"></i></li>' +
+                    '                            <li><i class="fal fa-compress-arrows-alt"></i></li>' +
+                    '                            <li><i class="fal fa-swimmer"></i></li>' +
+                    '                        </ul>' +
+                    '                        <h4 class="title"><a href="javascript:XQ('+data[i].id+')">查看详情</a></h4>' +
+                    '                        <p>'+data[i].adTitle+'</p>' +
+                    '                        <span class="price">'+data[i].pcPrice+'/元</span>' +
+                    '                        <a  href="#" class="book-btn">'+data[i].color+'</a>' +
+                    '                    </div>' +
+                    '                </div>' +
+                    '            </div>';
+            }
+            $("#teXiaoTu").html(html);
+        })
+    }
+    function search1(){
+        $("#productTable").datagrid('load',{
+            ad_title:$("#productName").textbox('getValue'),
+            startPrice:$("#startPrice").textbox('getValue'),
+            endPrice:$("#endPrice").textbox('getValue')
+        })
+    }
+    //删除
+    function deleteProduct(id) {
+        $.post('../product/deleteProduct',{id:id},function (data) {
+            search1();
+        })
+    }
+    //初始化表格
+    function initproductTable() {
+        $("#productTable").datagrid({
+            url:'../product/findProductList',
+            method:'post',
+            toolbar:'#toolbar',
+            fit:true,
+            pagination:true,
+            onBeforeLoad:function(param){
+                var rows=param.rows;
+                var page=param.page;
+                delete param.rows;
+                delete param.page;
+                param.size=rows;
+                param.page=page;
+            },
+            columns:[
+                [
+                    {field:'adTitle',title:'标题'},
+                    {field:'imageUrl',title:'商品图',formatter:function (value,row,index) {
+                            return '<img src="http://img14.360buyimg.com/n2/'+value+'" style="width: 50px"/>';
+                        }},
+                    {field:'pcPrice',title:'价格'},
+                    {field:'color',title:'颜色'},
+                    {field:'linkUrl',title:'查看',formatter:function (value,row,index) {
+                            return '<a href="'+value+'">查看</a>    |      <a href="javascript:deleteProduct(\''+row.id+'\')">删除</a>';
+                        }},
+                ]
+            ]
+        })
+    }
+</script>
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="../js/bootstrap3/css/bootstrap.css">
+    <script src="../js/bootstrap3/js/bootstrap.js"></script>
+    <script src="../js/jquery-1.10.2.min.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-table/bootstrap-table.css">
+    <script src="../js/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../js/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
+    <script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="../js/bootstrap-bootbox/bootbox.all.min.js"></script>
+
+    <script th:src="@{/js/jquery-1.11.3.min.js}"></script>
+    <style type="text/css">
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body {
+            background: url() no-repeat fixed;
+        }
+
+        #qq {
+            width: 600px;
+            /*宽*/
+            height: 170px;
+            /*高*/
+            background: #fff;
+            /*背景颜色*/
+            margin: 50px auto 30px;
+            border-radius: 5px;
+            /*Html5 圆角*/
+        }
+
+        #qq p {
+            font-size: 12px;
+            color: #666;
+            font-family: "微软雅黑";
+            line-height: 45px;
+            text-indent: 20px;
+        }
+
+        #qq .message {
+            width: 560px;
+            height: 70px;
+            margin: 0 auto;
+            overflow: hidden;
+            outline: none;
+            border: 1px solid #ddd;
+            padding: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #778899 0%, #333 100%);
+            /*粗细 风格 颜色*/
+        }
+
+        #qq .But {
+            width: 560px;
+            height: 35px;
+            margin: 15px auto 0px;
+            position: relative;
+            /*相对，参考对象*/
+        }
+
+        #qq .But img.bq {
+            float: left;
+            /*左浮动*/
+        }
+
+        #qq .But span.submit {
+            width: 80px;
+            height: 30px;
+            background: #ff8140;
+            display: block;
+            float: right;
+            /*右浮动*/
+            line-height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            /*手指*/
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            font-family: "微软雅黑";
+        }
+
+        /*face begin*/
+        #qq .But .face {
+            width: 440px;
+            background: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 12px #666;
+            position: absolute;
+            /*绝对定位*/
+            top: 21px;
+            left: 15px;
+            display: none;
+            /*隐藏*/
+        }
+
+        #qq .But .face ul {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        #qq .But .face ul li {
+            width: 30px;
+            height: 30px;
+            list-style-type: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /*msgCon begin*/
+        .msgCon {
+            width: 600px;
+            margin: 0px auto;
+            margin-bottom: 60px;
+        }
+
+        .msgCon .msgBox {
+            background: #fff;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-top: 16px;
+            border-radius: 4px;
+        }
+
+        .msgCon .msgBox .headUrl {
+            width: 100%;
+            height: 60px;
+            border-bottom: 1px dotted #ddd;
+            display: flex;
+            align-items: center;
+        }
+
+        .msgCon .msgBox .headUrl img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%
+        }
+
+        .msgCon .msgBox .headUrl div {
+            flex: 1;
+            display: flex;
+            flex-flow: column;
+            font-size: 16px;
+            margin-left: 16px;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to top, #b224ef 0%, #7579ff 100%);
+        }
+
+        .msgCon .msgBox .headUrl div .time {
+            font-size: 14px;
+            margin-top: 6px;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%);
+        }
+
+        .msgCon .msgBox .headUrl a {
+            font-size: 14px;
+            padding: 10px;
+            color: salmon;
+            cursor: pointer;
+        }
+
+        .msgCon .msgBox .msgTxt {
+            font-size: 14px;
+            color: #666;
+            min-height: 40px;
+            line-height: 24px;
+            padding: 10px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #778899 0%, #333 100%);
+        }
+    </style>
+</head>
+<style>
+    .dorp{
+        position: relative;
+        display: inline-block;
+    }
+    .dorp_con{
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 90px;
+        box-shadow: 4px 8px 16px 0px rgba(0,0,0,0.2);
+        padding: 12px 16px;
+    }
+    .dorp:hover .dorp_con{display:block;}
+
+</style>
+<body>
+<nav  class="navbar navbar-default navbar-static-top" style="background-color: #080808 ">
+    <div class="container-fluid">
+        <div class="col-md-4">
+            <div class="navbar-header">
+                <a class="navbar-brand glyphicon glyphicon-home" href="../page/tohome">
+                    爱尚酒店
+                </a>
+            </div>
+        </div>
+        <div class="col-md-2 col-md-offset-3">
+            <div align="center">
+                <img style="float: left;margin-top: 10px" id="Status" src="" width="40px" height="40px">
+            </div>
+            <div class="dorp">
+                <div class="navbar-brand" style="width: 150px">
+                        <span id="userStatus">
+                            <a href="javascript:Login()">请登录</a>
+                        </span>
+                    <div style="float: left;margin-left: 120px;margin-top:-21px;width: 200px" >
+                        <a href="javascript:gerenzh()">个人中心</a>
+                    </div>
+                    <div style="float: left;margin-left: 220px;margin-top:-21px;width: 200px" >
+                        <a href="javascript:chongZhi()">充值会员</a>
+                    </div>
+                </div>
+                <div id="ssss"></div>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container"  style="height: 100px;">
+    <h2 id="hData"></h2>
+    <h5 id="hData1"></h5>
+</div>
+<div class="container"  style="height: 500px">
+    <div class="row">
+        <div class="col-md-7" style="height: 500px">
+            <img src="" id="imgData" style="height: 500px;width: auto">
+        </div>
+        <div class="col-md-1" style="height: 500px;">
+        </div>
+        <div class="col-md-4" style="height: 500px;background-color: #fffafa">
+            <br/>
+            <font color="red" id="priceData" size="6"></font>
+            &nbsp;&nbsp;/每晚<br/>
+            <div style="float: left;margin-left: 100px;margin-top: 30px">
+                <a  href="javascript:dingdan1()" class="btn btn-info" style="height: 40px;width: 150px">立即预定</a>
+            </div>
+            <br/>
+            <iframe frameborder="0" scrolling="no" hspace="0" src="https://i.tianqi.com/?c=code&id=55" width="330px" height="350px"></iframe>
+            <br/>
+            <font color="#dc143c" size="4px">爱尚酒店：</font><br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="wheelcanva" size="3"></span>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div style="height: 150px;width: auto;" >
+        <div class="box">
+            <br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="" class="imgData1" style="height: 100px;width: 150px">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="" class="imgData1" style="height: 100px;width: 150px">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="" class="imgData1" style="height: 100px;width: 150px">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="" class="imgData1" style="height: 100px;width: 150px">
+        </div>
+
+    </div>
+</div>
+<div class="container">
+    <div style="height: 500px;width: auto;background-color: #fcfbff" >
+        <div class="container-fluid" style="background-color: #bebdc1;height: 150px">
+            <h2>个性描述:</h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            你将结识一个热情的满满正能量的四川妹儿，热爱生活，爱分享、喜欢养花草、宠物，希望与你共同感受这个城市的悠闲与慵懒。
+        </div><br>
+        <div class="container-fluid" style="background-color: #bebdc1;height: 150px">
+            <h2>内部情况:</h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            此套房的风格为ins北欧风，该房位于成都动物园东门高端电梯民宿，此处紧邻动物园，熊猫基地，春熙路，太古里，火车北站等等。
+            民宿附近有地铁，楼下有公交总站可以到达成都各旅游景区。
+            房子温馨干净，全新的所有家具饰品都是统一搭配采购，牙刷拖鞋，卫生间用品全部是屋主认真选购搭配。房间宽敞明亮，采光好，晚上睡觉零噪音。
+        </div><br>
+        <div class="container-fluid" style="background-color: #bebdc1;height: 150px">
+            <h2>交通情况:</h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            小屋位于动物园东紫路，距离熊猫基地大约2公里左右，距离3号线地铁站（动物园站AB出入口）走路不超过8分钟，
+            楼下公交站台可以乘坐64路公交车，直达春熙路等地方，若觉得没有你需要乘坐的公交线路，请您步行大约500米左右，到动物园公交总站乘坐。
+        </div>
+        <br>
+        <div class="container-fluid" style="background-color: #bebdc1;height: 150px">
+            <h2>周边情况:</h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            楼下有永辉超市，电影院，商场，及串串火锅等等各色小吃；邻近的地铁口周围有钢管厂串串，川西坝子和蜀大侠等有名气的店
+        </div>
+        <br>
+        <div class="container-fluid" style="background-color: #bebdc1;height: 150px">
+            <h2>配套设施:</h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <table>
+                <tbody id="dadaF"></tbody>
+            </table>
+        </div>
+        <br>
+
+    </div>
+</div>
+
+
+<div style="height: 300px"></div>
+<div id="qq">
+    <p>有什么新鲜事想告诉大家?</p>
+    <div class="message" contenteditable="true"  id="contexComment"></div>
+    <div class="But">
+        <button  class="btn btn-primary btn-xs glyphicon glyphicon-ok"  onclick="commentAdd()">发表</button>
+    </div>
+
+</div>
+
+<div class="msgCon"></div>
+
+
+
+
+<div class="container" style="height: 350px" >
+    <div class="foot_v2">
+        <ul class="foot_ul">
+            <li><a class="guide" href="https://www.xiaozhu.com/xzweb.php?op=Help_UserGuide&amp;type=tenant" target="_blank">房客指南</a></li>
+            <li><a class="guide icon_fk" href="https://www.xiaozhu.com/xzweb.php?op=Help_UserGuide&amp;type=landlord" target="_blank">房东指南</a></li>
+            <li>
+                <span class="guide_T">关于我们</span>
+                <a href="#" target="_blank">最终所有解释权归金科项目组所有</a>
+            </li>
+            <li>
+                <span class="guide_T">网站帮助</span>
+                <a href="https://www.xiaozhu.com/help/index" target="_blank">帮助中心</a>
+                <a href="https://www.xiaozhu.com/sitemap.html" target="_blank">网站地图</a>
+            </li>
+            <li class="width_280">
+                <span class="guide_T">网站协议</span><br>
+                <a href="https://www.xiaozhu.com/help/service" target="_blank">服务协议</a>
+                <a href="https://www.xiaozhu.com/help/landlordRule" target="_blank">房东规则</a>
+                <a href="https://www.xiaozhu.com/help/tenantRule" target="_blank">房客规则</a>
+                <a href="https://www.xiaozhu.com/help/auditRule" target="_blank">房源上线标准</a>
+                <a href="https://www.xiaozhu.com/help/privacy" target="_blank">隐私保护</a>
+                <a href="https://www.xiaozhu.com/help/copyright" target="_blank">版权声明</a>
+                <a href="https://www.xiaozhu.com/help/disclaimer" target="_blank">免责声明</a>
+                <a href="https://www.xiaozhu.com/help/intellectualProperty" target="_blank">知识产权声明</a>
+                <a href="https://www.xiaozhu.com/help/commentRule" target="_blank">点评发布规则</a>
+                <a href="https://www.xiaozhu.com/help/japanReservationRule" target="_blank">日本标准住宅宿泊仲介业约款</a>
+            </li>
+            <li class="bigFont online_kf">
+                <span class="logindialog"><i></i>在线客服</span>
+                <p>客服电话  400 - 010 - 7890</p>
+                <p>客服邮箱  service@xiaozhu.com</p>
+            </li>
+        </ul>
+        <dl class="link_dl">
+            <dt>城市导航</dt>
+            <dd>
+                <a target="_blank" href="//bj.xiaozhu.com/">北京短租房</a>
+                <a target="_blank" href="//sh.xiaozhu.com/">上海短租房</a>
+                <a target="_blank" href="//nj.xiaozhu.com/">南京短租房</a>
+                <a target="_blank" href="//cd.xiaozhu.com/">成都短租房</a>
+                <a target="_blank" href="//gz.xiaozhu.com/">广州短租房</a>
+                <a target="_blank" href="//cq.xiaozhu.com/">重庆短租房</a>
+                <a target="_blank" href="//wh.xiaozhu.com/">武汉短租房</a>
+                <a target="_blank" href="//dl.xiaozhu.com/">大连短租房</a>
+                <a target="_blank" href="//sanya.xiaozhu.com/">三亚短租房</a>
+                <a target="_blank" href="//lijiang.xiaozhu.com/">丽江短租房</a>
+                <a target="_blank" href="//tj.xiaozhu.com/">天津短租房</a>
+                <a target="_blank" href="//xianggang.xiaozhu.com/">香港短租房</a>
+                <a target="_blank" href="//cs.xiaozhu.com/">长沙短租房</a>
+                <a target="_blank" href="//wx.xiaozhu.com/">无锡短租房</a>
+                <a target="_blank" href="//km.xiaozhu.com/">昆明短租房</a>
+                <a target="_blank" href="//jn.xiaozhu.com/">济南短租房</a>
+                <a target="_blank" href="//xm.xiaozhu.com/">厦门短租房</a>
+                <a target="_blank" href="//qd.xiaozhu.com/">青岛短租房</a>
+                <a target="_blank" href="//zz.xiaozhu.com/">郑州短租房</a>
+                <a target="_blank" href="//xa.xiaozhu.com/">西安短租房</a>
+                <a target="_blank" href="//hz.xiaozhu.com/">杭州短租房</a>
+                <a target="_blank" href="//sz.xiaozhu.com/">深圳短租房</a>
+                <a target="_blank" href="//sy.xiaozhu.com/">沈阳短租房</a>
+                <a target="_blank" href="//su.xiaozhu.com/">苏州短租房</a>
+            </dd>
+        </dl>
+        <dl class="link_dl">
+            <br/><br/><br/>
+            <center> 我也是有底线的ヽ(ー_ー)ノ</center>
+        </dl>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        initdataPage();
+        //daoHangT();
+        //spin();
+        //commentHTMl();
+    })
+    /*  个人中心 */
+    function  gerenzh() {
+        $.post("../user/findLoginStatus",{},function (data) {
+            if (data.code != 0) {
+                window.location.href="../page/toLogin";
+            }else if(data.code==0){
+                window.location.href="../page/toMain";
+            }
+        })
+    }
+    /*  充值会员 */
+    function chongZhi() {
+        $.post("../user/findLoginStatus",{},function (data) {
+            if(data.code==0){
+                bootbox.dialog({
+                    title: '会员中心',
+                    message:createAddContent('../page/chongZhi'),
+                    closeButton:true,
+                    size: 'large'
+                })
+            }else{
+                window.location.href="../page/toLogin"
+            }
+        })
+    }
+    var res;
+    function createAddContent(url){
+        $.ajax({
+            url:url,
+            async:false,
+            success:function(data){
+                res = data;
+            }
+        });
+        return res;
+    }
+
+    /* 导航条 w */
+    function daoHangT() {
+        $.post("../user/findLoginStatus",{},function (data) {
+            if (data.code == 0) {
+                var userBean =  data.userBean;
+                var img = userBean.userImg;
+                img = img.replace("OSSA","ffOSSA");
+                var str  = "";
+                var zhongtai = "";
+                if(userBean.vipId==0){
+                    str+= userBean.userName
+                }else if(userBean.vipId==1){
+                    str +="<font color='#ffd700'>"+userBean.userName+"</font>";
+                    zhongtai += "<a href='#'>尊贵白金会员</a>";
+                }else if(userBean.vipId==2){
+                    str +="<font color='#ffd700'>"+userBean.userName+"</font>";
+                    zhongtai += "<a href='#'>黄金会员</a>";
+                }
+                else{
+                    str +="<font color='#ffd700'>"+userBean.userName+"</font>";
+                    zhongtai += "<a href='#'>白银会员</a>";
+                }
+                $("#userStatus").html(str);
+                $("#Status").prop("src",img);
+                $("#ssss").html("<div class='dorp_con' style='margin-top: 40px;'><p>"+zhongtai+"</p><p><a href='javascript:TCremove()'>退出账号</a></p></div>")
+            }
+        })
+    }
+
+    /* 退出账号 */
+    function TCremove() {
+        $.post('../comment/TuiChuiAccount',{},function(){
+            alert("退出账号成功！");
+            location.href="../page/tohome";
+        })
+    }
+
+    function Login() {
+        window.location.href = "../page/toLogin";
+    }
+    var restaraunts = ['美好的明天，从今晚长城开始!━━长城宾馆','香格里拉━━您bai平步青云的必然选择! ━━香格里拉大酒店','跨下银马座，好运自然来! ━━银马座酒店','千帆竞发扬子江，万冠云集新世界!━━新世纪酒店',
+        '挽卿手、共白头、阳光酒店誓千秋! ━━阳光酒店','乐在海洋━可食可玩可住!━━海洋酒店我心中的小沙梅!━━小沙酒店','到深圳，住新兴，驾车来，免费停，真实惠! ━━新兴大酒店','今宵伴君何处处？━━夜马黎大酒店',
+        '吃在夜上海! ━━夜上海酒店','美食精华，尽在海轩! ━━粤海轩酒店','到莎丽再见. 上海莎丽(Sally‘s)酒吧','广州中国大酒店,一切以您为中心. 广州中国大酒店','当然,我们的魅力无需多言. 北京皇家酒店'
+
+    ]
+    /* 推荐语词  */
+    function spin() {
+        var num = (Math.random()*1*10)+1;
+        var num1 = num.toString();
+        num1 = num1.split(".");
+        var splice = num1.splice(".");
+        for (var i = 0; i <restaraunts.length ; i++) {
+            $("#wheelcanva").text(restaraunts[splice[0]])
+            return;
+        }
+    }
+
+    //-----------------------
+    var iddd = null;
+    /* 页面信息加载  */
+    function initdataPage() {
+        var search1=location.search;   //获取location的search属性，保存在search中
+        search = search1.substr(4);
+        alert(search);
+        $.post("../product/productbyid",{id:search},function (data) {
+
+            iddd = data.houseId;
+            $("#hData1").text("酒店所在地区："+data.provinceName+"-"+data.cityName);
+            $("#hData").text(data.houseInfo)
+            var img = data.houseImg.replace("OSSA","ampOSSA");
+            img=img.replace('OSSA','ampOSSA');
+            $("#imgData").prop("src",img);
+
+            $(".imgData1").prop("src",img);
+            $("#priceData").text("￥ "+data.housePrice);
+            var info=data.facilitiesIds;
+            if(info!=null){
+                var split1 = info.split(",");
+                split1 = split1.toString();
+                ffff(split1);
+            }
+        })
+    }
+
+    function ffff(split1) {
+        $.post("../hotel/findfacilitiesByIds",{ids:split1},function (data){
+            var str = "<tr>"
+            for (var i = 0; i < data.length; i++) {
+                str +=
+                    "<td><h4>&nbsp;&nbsp;&nbsp;&nbsp; "+data[i].facilitiesName+"&nbsp;&nbsp;&nbsp;&nbsp; </h4></td>";
+            }
+            str+="</tr>"
+            $("#dadaF").html(str);
+        })
+    }
+    //酒店的评论发布
+
+
+
+
+
+    /* 跳转到订单页面 */
+    function dingdan1() {
+        window.location.href="../page/dingDan?id="+iddd;
+    }
+
+
+
+    function commentAdd() {
+        //获取评论的内容
+        var txt = $(".message").html();
+        $.post('../comment/commentAdd',{txt:txt},function (data) {
+            if (data.code==0) {
+                alert(data.msg)
+                commentHTMl();
+            } else {
+                alert(data.msg)
+            }
+        })
+
+    }
+
+
+
+
+    function commentHTMl() {
+        $.post('../comment/selectHouseByHotelId',{id:6},function (data) {
+            var str =""
+            for(var i in data){
+                str += "<div class='msgBox'>"+
+                    "<div class='headUrl'>"+
+                    "<img src="+data[i].userImg+" width='50' height='50'>"+
+                    "<div>"+
+                    "<span class='title'>"+data[i].userName+"</span>"+
+                    "<span class='time'>"+data[i].commentTime+"</span>"+
+                    "</div>"+
+                    "</div>"+
+                    "<div class='msgTxt'>"+data[i].commentInfo+"</div>"+
+                    "</div>"
+            }
+            $(".msgCon").prepend(str);
+        });
+    }
+
+
+</script>
+
+
+</html>

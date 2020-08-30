@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>用户登录</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <link rel="stylesheet" th:href="@{/login/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/login/css/style.default.css}" id="theme-stylesheet">
+
+</head>
+<body>
+<div class="page login-page">
+    <div class="container d-flex align-items-center">
+        <div class="form-holder has-shadow">
+            <div class="row">
+                <div class="col-lg-6 bg-white">
+                    <div class="form d-flex align-items-center">
+                        <div class="content">
+                            <form  class="form-horizontal" id="loginFrom">
+                                <div class="form-group">
+                                    <input id="account" type="text" name="account" required data-msg="请输入用户名" placeholder="用户名"  class="input-material">
+                                </div>
+                                <div class="form-group">
+                                    <input id="password" type="password" name="password" required data-msg="请输入密码" placeholder="密码" class="input-material">
+                                </div>
+                                <button onclick="dalog()" type="button" class="btn btn-primary">登录</button>
+                            </form>
+                            <br />
+                            <br />
+                            <small>没有账号?</small><a href="../user/tozhuce" class="signup">&nbsp;注册</a> &nbsp; | <a href="http:192.168.91.1:8084/toPage/toLogin" >商家登陆</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+&lt;!&ndash; JavaScript files&ndash;&gt;
+<script th:src="@{/login/js/jquery.min.js}"></script>
+<script th:src="@{/login/js/bootstrap.min.js}"></script>
+
+<script>
+    function openAddBookDialog(){
+        location.href="../page/toKjLogin"
+    }
+    function dalog(){
+        $.ajax({
+            url:'../user/login',
+            type:'get',
+            data:$("#loginFrom").serialize(),
+            dataType:'json',
+            async:false,
+            success:function(data){
+                if (data.code==0) {
+                    alert(data.msg)
+                    window.location.href="../user/tomain"
+                } else {
+                    alert(data.msg)
+
+                }
+            }
+        })
+
+    }
+</script>
+</body>
+</html>
+

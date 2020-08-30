@@ -1,0 +1,111 @@
+html,body{
+    width: 100%;
+    height: 100%;
+    background: url(../images/backstage_login_bg.jpg) no-repeat;
+    background-size: cover;
+}
+/*=============================顶部logo+标题===================================*/
+header{
+    padding-left: 62px;
+    padding-top: 30px;
+}
+header .mainTitle{
+    display: inline-block;
+    font-size: 14px;
+    color: #eeeff0;
+    padding-top: 3px;
+    margin-left: 5px;
+}
+/*=============中心部分=====================*/
+section{
+    width: 420px;
+    height: 500px;
+    margin: 0 auto;
+    /*opacity: 0.8;*/
+    /*background: #2D3645;*/
+    background: rgba(45,54,69,0.80);
+    box-shadow: 2px 2px 8px 0 rgba(0,0,0,0.20);
+    border-radius: 10px;
+    margin-top: 150px;
+    z-index: 1000;
+}
+.mainBox{
+    padding: 0 40px;
+}
+.login{
+    padding-top: 43px;
+    padding-bottom: 11px;
+    text-align: center;
+    font-size: 26px;
+    color: #FFFFFF;
+}
+.input{
+    padding-top: 45px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.60);
+}
+.input input{
+    margin-left: 38px;
+}
+.input .user{
+    position: relative;
+}
+.input .user .icon{
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+
+    position: absolute;
+    left: 9px;
+    top: 1px;
+}
+.input .user .icon-name{
+    background: url(../images/phpbg.fw.png) no-repeat -50px -170px;
+}
+.input .user .icon-pwd{
+    background: url(../images/phpbg.fw.png) no-repeat -30px -170px;
+}
+
+
+.sliderBox{
+    padding: 30px 0;
+}
+.loginBtn{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background: #4FE299;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+.remeberPwdBox{
+    margin-top: 20px;
+    text-align: right;
+    font-size: 14px;
+    color: #FFFFFF;
+}
+.remeberPwdBox .remember{
+    padding-top: 2px;
+    padding-right: 5px;
+}
+/*2018-1-3  添加*/
+.ui-slider-btn .rightRow {
+    content: '';
+    display: inline-block;
+    width: 15px;
+    height: 13px;
+    background: url(../images/php.fw.png) no-repeat -30px -180px;
+    position: absolute;
+    left: 12px;
+    top: 14px;
+}
+.ui-slider-bg{
+    border:1px solid #4FE299;
+    border-right: none;
+}
+input{
+    color: #fff;
+}

@@ -1,0 +1,91 @@
+private List<TreeBean> findChildren(Integer id) {
+		List<TreeBean> treeBeans = mapper.findTreeChildren(id);
+		for (int i = 0; i < treeBeans.size(); i++) {
+			List<TreeBean> findChildren = findChildren(treeBeans.get(i).getId());
+			treeBeans.get(i).setChildren(findChildren);
+		}
+		return treeBeans;
+	}
+
+
+
+
+<link rel="stylesheet" href="<%=request.getContextPath()%>/js/easyui/themes/bootstrap/easyui.css"/>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/js/easyui/themes/icon.css"/>
+<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/easyui/jquery.easyui.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=request.getContextPath()%>/js/easyui/util-js.js"></script>
+<script src="<%=request.getContextPath()%>/easyui/WebContent/js/jquery-1.9.1.min.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/js/uploadify/uploadify.css">
+
+
+<div class="easyui-layout" data-options="fit:true"></div>
+
+
+
+<div data-options="region:'north',title:'头部',iconCls:'icon-man'" style="height: 10%"></div>
+
+
+
+<div data-options="region:'west',title:'功能导航'" style="width: 20%">
+			<div class="easyui-accordion" data-options="fit:true">
+				<div title='管理'>
+					<ul id="dgTree"></ul>
+				</div>
+			</div>
+		</div>
+
+
+<div data-options="region:'center',title:'功能中心'">
+			<div id="myTabs" class="easyui-tabs" data-options="fit:true">
+				<div title='欢迎'>
+					
+				</div>
+			</div>
+		</div>
+
+<div data-options="region:'east',title:'附件',collapsed:true" style="width: 10%"></div>
+<div data-options="region:'south',title:'底部',collapsed:true" style="height: 10%"></div>
+
+
+
+function initDgTree(){
+	$("#dgTree").tree({
+		url:'<%=request.getContextPath()%>/book/findDgTreeList.do',
+		lines:true,
+		onClick:function(node){
+			//判断只有子节点才可以打开
+			if(node.children == null || node.children.length <= 0){
+				//判断当前点击的节点是否已经打开，如果打开则选中，否则添加新的tab
+				var exists = $("#myTabs").tabs('exists',node.text);
+				if (exists) {
+					$("#myTabs").tabs('select',node.text);
+				}else{
+					$("#myTabs").tabs('add',{
+						title:node.text,
+						content:createIframe(node.url),
+						closable:true,//可以关闭
+						tools:[{
+							iconCls:'icon-mini-refresh',
+							handler:function(){
+								var tab = $('#myTabs').tabs('getSelected');  // 获取选择的面板
+								$('#myTabs').tabs('update', {
+									tab: tab,
+									options: {
+										title: node.text,
+										content:createIframe(node.url)
+									}
+								});
+							}
+						}]
+					})
+				}
+			}
+		}
+	})
+}
+
+function createIframe(url){
+	return '<iframe scrolling="auto" frameborder="0"  src="<%=request.getContextPath()%>'+ url + '" style="width:100%;height:99%;"></iframe>';  
+}

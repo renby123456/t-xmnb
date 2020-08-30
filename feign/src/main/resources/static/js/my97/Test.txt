@@ -1,0 +1,80 @@
+$(function(){
+		inittable();
+	});
+	
+	function jia(id,price){//加
+		var count= $("#id"+id).val()
+		count++;
+		$("#id"+id).val(count)
+		$("#sp"+id).text($("#id"+id).val()*price) 
+	}
+	function jian(id,price){//减
+		if($("#id"+id).val()<=0){
+			alert("已经没了哦");
+			return;
+		}
+		var count= $("#id"+id).val()
+		count--;
+		$("#id"+id).val(count)
+		$("#sp"+id).text($("#id"+id).val()*price)
+	}
+	function saveOrUpdate(){//下单
+		var rows = $("#eatTable").datagrid('getRows');
+		var sumPrice = 0;
+		for (var i = 0; i < rows.length; i++) {
+			var id = rows[i].tvarityid;
+			sumPrice += Number($("#sp"+id).text());
+		}
+		$.post("<%=request.getContextPath()%>/user/update.do",{price:sumPrice},function(){
+			$("#varityDialog").dialog('close');
+			 parent.ininusers();
+		})
+		
+	}
+
+	function dc(id){
+		$("#eatTable").datagrid({
+			url:'<%=request.getContextPath()%>/user/queryvarity.do?id='+id,
+			fit:true,
+			columns:[[
+				{field:'tvarityname',title:'菜名'},
+				{field:'tvarityprice',title:'价格'},
+				{field:'fx',title:'份数',formatter:function(value,row,index){
+					var str = '<input onclick="jian('+row.tvarityid+','+row.tvarityprice+')" type="button" value="-"/>'
+						str += '<input id="id'+row.tvarityid+'" type="text" size="3" value="0"/>';
+						str += '<input onclick="jia('+row.tvarityid+','+row.tvarityprice+')" type="button" value="+"/>'
+					return str;
+				}},
+				{field:'dj',title:'此单价格',formatter:function(value,row,index){
+					return '<span id="sp'+row.tvarityid+'">0</span>'
+				}}
+			]]
+		})
+		
+		$("#varityDialog").dialog({
+			title:'订餐咯',
+			iconCls:'icon-add',
+			closed:false
+		})
+	}
+function inittable(){
+	$("#myTable").datagrid({
+		url:'<%=request.getContextPath()%>/user/findEetingHoseList.do',
+		method:'post',
+		fit:true,
+		pagination:true,//开启分页工具条
+		pageNumber:1,
+		pageSize:2,
+		pageList:[4,8,10,20,30],
+		columns:[[
+			{field:'teatingid',title:'店铺ID'},
+			{field:'teatingname',title:'店铺名称'},
+			{field:'teatingis',title:'店铺营业状态',formatter:function(value,row,index){
+				return value==1?"是":"否";
+			}},
+			{field:'cz',title:'操作',formatter:function(value,row,index){
+				return row.teatingis==1?"<input type='button' value='订餐' onclick='dc("+row.teatingid+")'>":"该店铺未营业";
+			}}
+		]]
+	})
+}
